@@ -1,39 +1,32 @@
-// ==========================================
-// SUPABASE CONFIGURATION
-// ==========================================
-// নিচের দুইটা লাইনে আপনার Supabase প্রজেক্টের তথ্য বসাবেন (ধাপ ৩ দেখুন)
-const SUPABASE_URL = 'https://czjsvyyihbafizyzvdnh.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_8ZRafqmUlliQcLBluyu1CQ_WB2Fa';
-
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Contact Form Submission handler
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
 
 contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
+    const mobile = document.getElementById('mobile').value;
+    const organization = document.getElementById('organization').value;
+    const serviceType = document.getElementById('serviceType').value;
     const message = document.getElementById('message').value;
 
-    formStatus.style.color = '#6366f1';
+    formStatus.style.color = '#60a5fa';
     formStatus.textContent = 'Sending your message...';
 
     try {
         const { data, error } = await supabaseClient
-            .from('contacts')
-            .insert([{ name, email, message }]);
+            .from('contacts') // Supabase table name
+            .insert([{ name, email, mobile, organization, service_type: serviceType, message }]);
 
         if (error) throw error;
 
-        formStatus.style.color = '#10b981';
-        formStatus.textContent = 'Message sent successfully! Thank you.';
+        formStatus.style.color = '#4ade80';
+        formStatus.textContent = 'Message sent successfully!';
         contactForm.reset();
-    } catch (err) {
-        console.error('Error:', err);
-        formStatus.style.color = '#ef4444';
-        formStatus.textContent = 'Failed to send message. Please try again.';
+    } catch (error) {
+        formStatus.style.color = '#f87171';
+        formStatus.textContent = 'Error sending message. Please try again.';
+        console.error('Error:', error.message);
     }
 });
