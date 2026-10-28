@@ -1,173 +1,32 @@
-.work-for-section, .services-section {
-    padding: 60px 20px;
-    background-color: #0b0f19;
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
 
-.section-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
+contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-.section-header h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #ffffff;
-}
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const mobile = document.getElementById('mobile').value;
+    const organization = document.getElementById('organization').value;
+    const serviceType = document.getElementById('serviceType').value;
+    const message = document.getElementById('message').value;
 
-.section-header p {
-    color: #9ca3af;
-    font-size: 16px;
-}
+    formStatus.style.color = '#60a5fa';
+    formStatus.textContent = 'Sending your message...';
 
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+    try {
+        const { data, error } = await supabaseClient
+            .from('contacts') // Supabase table name
+            .insert([{ name, email, mobile, organization, service_type: serviceType, message }]);
 
-.service-card {
-    background: #111827;
-    border: 1px solid #1f2937;
-    padding: 30px;
-    border-radius: 12px;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
+        if (error) throw error;
 
-.service-card:hover {
-    transform: translateY(-5px);
-    border-color: #3b82f6;
-}
-
-.card-icon {
-    font-size: 32px;
-    margin-bottom: 15px;
-}
-
-.service-card h3 {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #f3f4f6;
-}
-
-.service-card p {
-    color: #9ca3af;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.badge {
-    display: inline-block;
-    background: rgba(59, 130, 246, 0.1);
-    color: #60a5fa;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    letter-spacing: 0.5px;
-}
-
-/* Contact Section Styling */
-.contact-section {
-    padding: 60px 20px;
-    background-color: #0b0f19;
-    display: flex;
-    justify-content: center;
-}
-
-.contact-container {
-    background: #111827;
-    border: 1px solid #1f2937;
-    padding: 40px;
-    border-radius: 12px;
-    max-width: 800px;
-    width: 100%;
-}
-
-.contact-container h2 {
-    text-align: center;
-    font-size: 32px;
-    color: #ffffff;
-    margin-bottom: 10px;
-}
-
-.contact-container p {
-    text-align: center;
-    color: #9ca3af;
-    margin-bottom: 30px;
-}
-
-.form-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group.full-width {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #e5e7eb;
-    margin-bottom: 8px;
-}
-
-.form-group input, 
-.form-group select, 
-.form-group textarea {
-    padding: 12px;
-    border: 1px solid #374151;
-    background-color: #1f2937;
-    color: #ffffff;
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.form-group input:focus, 
-.form-group select:focus, 
-.form-group textarea:focus {
-    border-color: #3b82f6;
-}
-
-.form-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    font-size: 13px;
-    color: #9ca3af;
-}
-
-.submit-btn {
-    width: 100%;
-    background-color: #3b82f6;
-    color: white;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.submit-btn:hover {
-    background-color: #2563eb;
-}
+        formStatus.style.color = '#4ade80';
+        formStatus.textContent = 'Message sent successfully!';
+        contactForm.reset();
+    } catch (error) {
+        formStatus.style.color = '#f87171';
+        formStatus.textContent = 'Error sending message. Please try again.';
+        console.error('Error:', error.message);
+    }
+});
