@@ -11,7 +11,7 @@ contactForm.addEventListener('submit', async (e) => {
     const serviceType = document.getElementById('serviceType').value;
     const message = document.getElementById('message').value;
 
-    formStatus.style.color = '#60a5fa';
+    formStatus.style.color = '#7c3aed';
     formStatus.textContent = 'Sending your message...';
 
     try {
@@ -21,11 +21,11 @@ contactForm.addEventListener('submit', async (e) => {
 
         if (error) throw error;
 
-        formStatus.style.color = '#4ade80';
+        formStatus.style.color = '#10b981';
         formStatus.textContent = 'Message sent successfully!';
         contactForm.reset();
     } catch (error) {
-        formStatus.style.color = '#f87171';
+        formStatus.style.color = '#ef4444';
         formStatus.textContent = 'Error sending message. Please try again.';
         console.error('Error:', error.message);
     }
